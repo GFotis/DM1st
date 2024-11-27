@@ -5,6 +5,8 @@
 import tkinter as tk # Dictionary for the GUI application
 from tkinter import ttk # Dictionary for the GUI application
 from preproccess_phase.indexing import create_index
+from .add_remove import addremove_menu
+from .search import search_menu
  
 # GUI
 def main_menu():
@@ -16,6 +18,6 @@ def main_menu():
     ttk.Label(frm, text="Καλώς ήρθες στον φυλλομετρητή μας!").grid(column=0, row=0)
     ttk.Label(frm, text="Επιλέξτε μία από τις διαθέσιμες επιλογές του φυλλομετρητή: ").grid(column=0, row=1)
     ttk.Button(frm, text="Έξοδος ", command=main_window.destroy).grid(column=1, row=0)
-    ttk.Button(frm, text="Αναζήτηση ", command=create_index).grid(column=1, row=1)
-    ttk.Button(frm, text="Προσθήκη/Διαγραφή καταχώρησης ", command=create_index).grid(column=1, row=2)
+    ttk.Button(frm, text="Αναζήτηση ", command=search_menu).grid(column=1, row=1)
+    ttk.Button(frm, text="Προσθήκη/Διαγραφή καταχώρησης ", command=addremove_menu).grid(column=1, row=2)
     main_window.mainloop()

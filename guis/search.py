@@ -4,10 +4,9 @@
 
 import tkinter as tk # Dictionary for the GUI application
 from tkinter import ttk # Dictionary for the GUI application
-from ..preproccess_phase import indexing
 
 # GUI
-def main_menu():
+def search_menu():
     main_window = tk.Tk()
     main_window.title("Browser \"The Incognitooo...\"")
     main_window.geometry("1366x768")  # Width x Height
@@ -16,6 +15,4 @@ def main_menu():
     ttk.Label(frm, text="Καλώς ήρθες στον φυλλομετρητή μας!").grid(column=0, row=0)
     ttk.Label(frm, text="Επιλέξτε μία από τις διαθέσιμες επιλογές του φυλλομετρητή: ").grid(column=0, row=1)
     ttk.Button(frm, text="Έξοδος ", command=main_window.destroy).grid(column=1, row=0)
-    ttk.Button(frm, text="Αναζήτηση ", command=indexing.create_index).grid(column=1, row=1)
-    ttk.Button(frm, text="Προσθήκη/Διαγραφή καταχώρησης ", command=indexing.create_index).grid(column=1, row=2)
     main_window.mainloop()
