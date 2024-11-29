@@ -9,6 +9,7 @@ def indexing_and_preprocessing():
     next(input_file)
     for line in input_file:
         doc=line.strip().split(',')
+        
         if len(doc)!=20:
             continue
         temp={
@@ -34,35 +35,6 @@ def indexing_and_preprocessing():
             "LastStatement": doc[19]
         }
         json_file=json.dumps(temp)
-        client.index(index="evretirio", document=json_file, ignore=400)
+        client.index(index="last_statement", document=json_file, ignore=400)
         print(f"Indexed document ID {doc}")
-    """
-        # Initialize index dictionary
-    global index
-    index = {}
-    client.indices.create(index='Evretirio', ignore=400)
-    with open('stopwords.txt', 'r') as stopwords_file:
-        stopwords = set()
-        for line in stopwords_file:
-            stopwords.add(line.strip().lower())
-
-    def preproccess_input_data(line, row_number, index):
-        words = line.split(',') 
-        for word in words:
-            word = word.strip()
-            word = word.lower()
-            if word in stopwords:
-                continue
-            if word not in index:
-                index[word] = []
-            index[word].append(row_number)
-    return index
-
-def convert_to_json():
-    json_file = open("input.json", "wr")
-    input_file = open("input_data\\Texas Last Statement.csv", "rt")
-    next(input_file)
-    for line in input_file:
-        json_file.write(json.dumps(line))
-    return json_file
-    """
+    input_file.close()

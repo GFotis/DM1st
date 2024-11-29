@@ -14,7 +14,7 @@ def search_menu():
     indexing_and_preprocessing()
     frm.grid()
     ttk.Label(frm, text="Θέλω αρχικά να επιλέξεις το μοντέλο με το οποίο θα γίνεται η αναζήτησή σου:").grid(column=0, row=0)
-    ttk.OptionMenu(frm, "Επιλογή μοντέλου", "Μοντέλο 1", "Μοντέλο 2", "Μοντέλο 3").grid(column=1, row=2)
+    #ttk.OptionMenu(frm, "Επιλογή μοντέλου", "Μοντέλο 1", "Μοντέλο 2", "Μοντέλο 3").grid(column=1, row=2)
     ttk.Label(frm, text="Επιλέξτε μία από τις διαθέσιμες επιλογές του φυλλομετρητή: ").grid(column=0, row=1)
     ttk.Button(frm, text="Έξοδος ", command=main_window.destroy).grid(column=1, row=0)
     ttk.Button(frm, text="Αναζήτηση ", command=search_menu).grid(column=1, row=0)
