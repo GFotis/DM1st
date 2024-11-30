@@ -40,16 +40,17 @@ def add_from_file(file_path):
         json_file=json.dumps(temp)
         client.index(index="last_statement",id=doc[0], document=json_file)
         print(f"Indexed document ID {doc}")
-def remove_from_index(doc_id):
-    client.delete(index="last_statement", id=doc_id)
+def remove_from_index(doc_to_remove):
+    print(doc_to_remove)
+    client.delete(index="last_statement", id=doc_to_remove)
 
-    client.indices.delete(index="last_statement")
-    client.update(
-        index="last_statement",
-        id="2",
-        doc={
-            "LastName": "Bond"
+    #client.indices.delete(index="last_statement")
+    #client.update(
+   #     index="last_statement",
+    #    id="2",
+   #     doc={
+    #        "LastName": "Bond"
             
-        },
-    )
-    client.delete(index="last_statement", id=doc_id)
+   #     },
+   # )
+   # client.delete(index="last_statement", id=doc_id)
