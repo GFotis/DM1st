@@ -9,9 +9,9 @@ def indexing_and_preprocessing():
     next(input_file)
     for line in input_file:
         doc=line.strip().split(',')
-        
         if len(doc)!=20:
             continue
+        client.indices.analyze(tokenizer="standard", filter=["stemmer"], text=doc[19].lower())
         temp={
             "Execution": doc[0],
             "LastName": doc[1],
@@ -34,6 +34,7 @@ def indexing_and_preprocessing():
             "MaleVictim": doc[18],
             "LastStatement": doc[19]
         }
+        
         json_file=json.dumps(temp)
         client.index(index="last_statement", document=json_file, ignore=400)
         print(f"Indexed document ID {doc}")
