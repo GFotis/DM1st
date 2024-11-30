@@ -11,7 +11,8 @@ def indexing_and_preprocessing():
         doc=line.strip().split(',')
         if len(doc)!=20:
             continue
-        client.indices.analyze(tokenizer="standard", filter=["stemmer"], text=doc[19].lower())
+        line_rmst=remove_stopwords(doc[19])
+        client.indices.analyze(tokenizer="standard", filter=["stemmer"], text=line_rmst.lower())
         temp={
             "Execution": doc[0],
             "LastName": doc[1],
@@ -32,10 +33,19 @@ def indexing_and_preprocessing():
             "VictimOther Races": doc[16],
             "FemaleVictim": doc[17],
             "MaleVictim": doc[18],
-            "LastStatement": doc[19]
+            "LastStatement": line_rmst
         }
         
         json_file=json.dumps(temp)
         client.index(index="last_statement", document=json_file, ignore=400)
         print(f"Indexed document ID {doc}")
     input_file.close()
+
+def remove_stopwords(line):
+    file=open("stopwords.txt", "r")
+    words = line.split(r"[, \n]")
+    stopwords = file.read().split(r"[, \n]")
+    for word in words:
+        if word in stopwords:
+            words.remove(word)
+    return " ".join(words)
