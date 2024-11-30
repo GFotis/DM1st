@@ -8,7 +8,7 @@ def indexing_and_preprocessing():
     input_file = open("input_data\\Texas Last Statement.csv", "r")
     next(input_file)
     for line in input_file:
-        doc=line.strip().split(',')
+        doc=line.strip().split(',',19)
         if len(doc)!=20:
             continue
         #line_rmst=remove_stopwords(doc[19]) PROSWRINA EKTOS LEITOURGIAS
