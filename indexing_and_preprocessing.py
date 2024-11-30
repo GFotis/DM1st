@@ -11,8 +11,8 @@ def indexing_and_preprocessing():
         doc=line.strip().split(',')
         if len(doc)!=20:
             continue
-        line_rmst=remove_stopwords(doc[19])
-        client.indices.analyze(tokenizer="standard", filter=["stemmer"], text=line_rmst.lower())
+        #line_rmst=remove_stopwords(doc[19]) PROSWRINA EKTOS LEITOURGIAS
+        client.indices.analyze(tokenizer="standard", filter=["stemmer"], text=doc[19].lower())
         temp={
             "Execution": doc[0],
             "LastName": doc[1],
@@ -33,7 +33,7 @@ def indexing_and_preprocessing():
             "VictimOther Races": doc[16],
             "FemaleVictim": doc[17],
             "MaleVictim": doc[18],
-            "LastStatement": line_rmst
+            "LastStatement": doc[19]
         }
         
         json_file=json.dumps(temp)
