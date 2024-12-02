@@ -3,43 +3,46 @@
 # Dimitrios Bozikakis 2022202000027 dit20027@go.uop.gr
 from elasticsearch_connection import client
 import json
+import pandas 
+
+#PROSWRINA ME PANDAS GIA NA PROXWRISEI TO PROJECT
 
 def indexing_and_preprocessing():
-    input_file = open("input_data\\Texas Last Statement.csv", "r")
-    next(input_file)
-    for line in input_file:
-        doc=line.strip().split(',',19)
-        if len(doc)!=20:
-            continue
+    #input_file = open("input_data\\Texas Last Statement.csv", "r")
+    input_file=pandas.read_csv("input_data\\Texas Last Statement.csv")
+    #next(input_file)
+    for _,line in input_file.iterrows():
+        #doc=line.strip().split(',',19)
+        #if len(doc)!=20:
+           # continue
         #line_rmst=remove_stopwords(doc[19]) PROSWRINA EKTOS LEITOURGIAS
-        client.indices.analyze(tokenizer="standard", filter=["stemmer"], text=doc[19].lower())
+        #client.indices.analyze(tokenizer="standard", filter=["stemmer"], text=input_file[19].str.lower())
         temp={
-            "Execution": doc[0],
-            "LastName": doc[1],
-            "FirstName": doc[2],
-            "TDCJNumber": doc[3],
-            "Age": doc[4],
-            "Race": doc[5],
-            "CountyOfConviction": doc[6],
-            "AgeWhenReceived": doc[7],
-            "EducationLevel": doc[8],
-            "NativeCounty": doc[9],
-            "PreviousCrime": doc[10],
-            "Codefendants": doc[11],
-            "NumberVictim": doc[12],
-            "WhiteVictim": doc[13],
-            "HispanicVictim": doc[14],
-            "BlackVictim": doc[15],
-            "VictimOther Races": doc[16],
-            "FemaleVictim": doc[17],
-            "MaleVictim": doc[18],
-            "LastStatement": doc[19]
+            "Execution": line['Execution'],
+            "LastName": line['LastName'],
+            "FirstName": line['FirstName'],
+            "TDCJNumber": line['TDCJNumber'],
+            "Age": line['Age'],
+            "Race": line['Race'],
+            "CountyOfConviction": line['CountyOfConviction'],
+            "AgeWhenReceived": line['AgeWhenReceived'],
+            "EducationLevel": line['EducationLevel'],
+            "NativeCounty": line['NativeCounty '],
+            "PreviousCrime": line['PreviousCrime'],
+            "Codefendants": line['Codefendants'],
+            "NumberVictim": line['NumberVictim'],
+            "WhiteVictim": line['WhiteVictim'],
+            "HispanicVictim": line['HispanicVictim'],
+            "BlackVictim": line['BlackVictim'],
+            "VictimOther Races": line['VictimOther Races'],
+            "FemaleVictim": line['FemaleVictim'],
+            "MaleVictim": line['MaleVictim'],
+            "LastStatement": line['LastStatement']
         }
-        
         json_file=json.dumps(temp)
         client.index(index="last_statement", document=json_file, ignore=400)
-        print(f"Indexed document ID {doc}")
-    input_file.close()
+        #print(f"Indexed document ID {doc}")
+    #input_file.close()
 
 def remove_stopwords(line):
     file=open("stopwords.txt", "r")
