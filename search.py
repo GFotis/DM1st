@@ -27,25 +27,73 @@ def searching_vsm():
     for hit in resp['hits']['hits']:
         print(f"Αναζήτηση: {hit['_source']}")
 
-
 def searching_boolean():
-    ttk.Label(frm, text="Εισάγετε το κείμενο που θέλετε να αναζητήσετε:").grid(column=0, row=1)
-    search_entry = ttk.Entry(frm, width=50)
-    
-    query = {
-        "query": {
-            "bool": {
-                "must": [
-                    {"match": {"LastStatement": fields["must"]}}  # Must match 'must' term in LastStatement
-                ],
-                "should": [
-                    {"match": {"FirstName": fields["should"]}},  # Should match 'should' term in FirstName
-                    {"match": {"LastName": fields["should"]}}   # Should match 'should' term in LastName
-                ],
-                "must_not": [
-                    {"match": {"LastName": fields["must_not"]}}  # Must not match 'must_not' term in LastName
-                ]
-            }
-        }
-    }
+    #frm.destroy()
+    final_query = None
+    for element in frm.winfo_children():
+        element.destroy()
+    search_entry = selections(final_query)
+    #search_entry = ttk.Entry(frm, width=50)
+    client.search(index="last_statement", body=search_entry, ignore=400)
+    print("EPITUXWS TO SEARCH")
     pass
+
+def flag_true(flag):
+        flag=True
+
+def selections(final_query):
+    fields = ["Execution", "LastName", "FirstName", "TDCJNumber", "Age", "Race","CountyOfConviction", "AgeWhenReceived", "EducationLevel", "NativeCounty",
+            "PreviousCrime", "Codefendants", "NumberVictim ", "WhiteVictim","HispanicVictim", "BlackVictim", "VictimOther Races", "FemaleVictim", "MaleVictim", "LastStatement"]
+    ttk.Label(frm, text="Αρχικά θα επιλέξεις σε ποια πεδια θες να αναζητησεις.").grid(column=0, row=1)
+    ttk.Label(frm, text="Επιλέξτε το/τα πεδίο/πεδία αναζήτησης:").grid(column=0, row=2)
+    choosen = {
+        "Execution": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "LastName": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "FirstName": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "TDCJNumber": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "Age": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "Race": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "CountyOfConviction": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "AgeWhenReceived": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "EducationLevel": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "NativeCounty": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "PreviousCrime": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "Codefendants": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "NumberVictim ": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "WhiteVictim": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "HispanicVictim": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "BlackVictim": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "VictimOther Races": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "FemaleVictim": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "MaleVictim": {"choosen": tk.IntVar(), "type": "not_choosen"},
+        "LastStatement": {"choosen": tk.IntVar(), "type": "not_choosen"}
+    }
+    for i in range(0,19):
+        choosen[fields[i]]["choosen"]=tk.IntVar()
+        ttk.Checkbutton(frm, text=fields[i]).grid(row=i, column=1)
+        choosen[fields[i]]["type"] = tk.StringVar()
+        ttk.Radiobutton(frm, text="Must", variable=choosen[fields[i]]["type"], value="must").grid(row=i, column=2)
+        ttk.Radiobutton(frm, text="Should", variable=choosen[fields[i]]["type"], value="should").grid(row=i, column=3)
+        ttk.Radiobutton(frm, text="Must Not", variable=choosen[fields[i]]["type"], value="must_not").grid(row=i, column=4)
+        choosen[fields[i]]["type"].set("not_choosen")
+    ttk.Button(frm, text="Υποβολή", command=lambda: construct_query(choosen, fields, final_query)).grid(column=0, row=19)
+     
+def construct_query(choosen, fields, final_query):
+    query = None
+    for i in range(0,19):
+        if choosen[fields[i]]["choosen"].get() == 1:
+            search_entry = ttk.Entry(frm, width=50)
+            search_entry.grid(column=1, row=20)
+            query="{query:{ bool: "+choosen[fields[i]]["type"]+"{: {match:"+ {fields[i]: search_entry.get()}+"}}}}"
+            """
+            query = {
+                    "query": {
+                        "bool": {choosen[fields[i]]["type"]: {
+                                    "match": {fields[i]: search_entry.get()
+                                    }
+                                }
+                        }
+                    }
+            }
+            """
+    final_query = query
