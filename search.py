@@ -67,7 +67,7 @@ def selections():
         ).grid(row=i, column=1)
 
         # Create a StringVar for the radiobutton group
-        choosen[fields[i]]["type"] = tk.StringVar(value="must")  # Default to "must"
+        choosen[fields[i]]["type"] = tk.StringVar(value="not-choosen")  # Default to "must"
 
         # Radiobuttons for "must", "should", and "must-not"
         ttk.Radiobutton(
@@ -94,14 +94,14 @@ def selections():
 def construct_query(choosen, fields):
     query = None
 
-    for i in choosen.keys():
-        print(choosen[i]["choosen"].get())
-        print(choosen[i]["type"].get())
-    for i in range(0,19):
-        if choosen[fields[i]]["choosen"].get():
+    for field in fields:
+        if choosen[field]["choosen"].get():  # Check if field is selected
+            print(choosen[field]["type"].get())
+    for field in fields:
+        if choosen[field]["choosen"].get():
             search_entry = ttk.Entry(frm, width=50)
             search_entry.grid(column=1, row=20)
-            query="{query:{ bool: "+choosen[fields[i]]["type"]+"{: {match:"+ {fields[i]: search_entry.get()}+"}}}}"
+            query="{query:{ bool: "+choosen[field]["type"]+"{: {match:"+ {fields[i]: search_entry.get()}+"}}}}"
             client.search(index="last_statement", body=query, ignore=400)
     print(query)
     print("EPITUXWS TO SEARCH")
