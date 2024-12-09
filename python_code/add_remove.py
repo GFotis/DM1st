@@ -3,18 +3,19 @@
 # Dimitrios Bozikakis 2022202000027 dit20027@go.uop.gr
 
 import tkinter as tk # Dictionary for the GUI application
-from tkinter import ttk, Label,  Button, filedialog, messagebox # Dictionary for the GUI application
-from tkinter.ttk import Entry
+from tkinter import ttk, Label,Entry,  Button, filedialog, messagebox # Dictionary for the GUI application
 from elasticsearch_connection import client
 
 # GUI
 import json
 #client.indices.delete(index="last_statement")
+
 def select_file():
     file_path = filedialog.askopenfilename(
         filetypes=[("CSV Files", "*.csv"), ("JSON Files", "*.json"), ("Text Files", "*.txt")],
         title="Select a File"
     )
+    print(file_path)
     return file_path
 def add_from_file():
     input_file = open(select_file(), "r")
@@ -59,13 +60,15 @@ def remove_index():
 
 root = tk.Tk()
 root.title("Add or remove data from file")
+delete_Entry=tk.StringVar()
 frm = ttk.Frame(root, padding=10)
 frm.grid()
 ttk.Label(frm, text="Επέλεξε αρχείο:").grid(column=0, row=0)    
-ttk.Button(frm,text="Browse..",command=select_file).grid(column=1,row=0)
+ttk.Button(frm,text="Browse..",command=add_from_file).grid(column=1,row=0)
 ttk.Label(frm, text="Διέγραψε κάποιον:").grid(column=0, row=1)
-delete_Entry=Entry(frm, width=50).grid(column=1,row=1)
+tk.Entry(frm,textvariable=delete_Entry, width=50).grid(column=1,row=1)
 ttk.Button(frm,text="Delete",command=remove_from_index).grid(column=2,row=1)
+ttk.Button(frm,text="Delete Index",command=remove_index).grid(column=0,row=2)
 
 
 root.mainloop()
