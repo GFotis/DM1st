@@ -3,16 +3,27 @@
 # Dimitrios Bozikakis 2022202000027 dit20027@go.uop.gr
 
 import tkinter as tk # Dictionary for the GUI application
-from tkinter import ttk # Dictionary for the GUI application
+from tkinter import ttk, Label,Entry,  Button, filedialog, messagebox # Dictionary for the GUI application
 from elasticsearch_connection import client
+
 # GUI
 import json
 #client.indices.delete(index="last_statement")
-def add_from_file(file_path):
-    input_file = open(file_path, "r")
+
+def select_file():
+    file_path = filedialog.askopenfilename(
+        filetypes=[("CSV Files", "*.csv"), ("JSON Files", "*.json"), ("Text Files", "*.txt")],
+        title="Select a File"
+    )
+    print(file_path)
+    return file_path
+def add_from_file():
+    input_file = open(select_file(), "r")
     next(input_file)
     for line in input_file:
         doc=line.strip().split(',',19)
+        
+        
         temp={
             "Execution": doc[0],
             "LastName": doc[1],
@@ -38,9 +49,31 @@ def add_from_file(file_path):
         json_file=json.dumps(temp)
         client.index(index="last_statement",id=doc[0], document=json_file)
         print(f"Indexed document ID {doc}")
-def remove_from_index(doc_to_remove):
+def remove_from_index():
+    doc_to_remove=delete_Entry.get()
     print(doc_to_remove)
     client.delete(index="last_statement", id=doc_to_remove)
+
+def remove_index():
+    print("Deleting index..")
+    client.indices.delete(index="last_statement")
+
+root = tk.Tk()
+root.title("Add or remove data from file")
+delete_Entry=tk.StringVar()
+frm = ttk.Frame(root, padding=10)
+frm.grid()
+ttk.Label(frm, text="Επέλεξε αρχείο:").grid(column=0, row=0)    
+ttk.Button(frm,text="Browse..",command=add_from_file).grid(column=1,row=0)
+ttk.Label(frm, text="Διέγραψε κάποιον:").grid(column=0, row=1)
+tk.Entry(frm,textvariable=delete_Entry, width=50).grid(column=1,row=1)
+ttk.Button(frm,text="Delete",command=remove_from_index).grid(column=2,row=1)
+ttk.Button(frm,text="Delete Index",command=remove_index).grid(column=0,row=2)
+
+
+root.mainloop()
+
+
 
     #client.indices.delete(index="last_statement")
     #client.update(

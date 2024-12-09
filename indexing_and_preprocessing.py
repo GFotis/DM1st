@@ -4,6 +4,7 @@
 from elasticsearch_connection import client
 import json
 import pandas 
+import csv
 
 #PROSWRINA ME PANDAS GIA NA PROXWRISEI TO PROJECT
 
@@ -11,6 +12,7 @@ def indexing_and_preprocessing():
     #input_file = open("input_data\\Texas Last Statement.csv", "r")
     input_file=pandas.read_csv("input_data\\Texas Last Statement.csv")
     #next(input_file)
+    sum=0
     for _,line in input_file.iterrows():
         #doc=line.strip().split(',',19)
         #if len(doc)!=20:
@@ -39,10 +41,12 @@ def indexing_and_preprocessing():
             "MaleVictim": line['MaleVictim'],
             "LastStatement": line['LastStatement']
         }
+        sum+=1
         json_file=json.dumps(temp)
         client.index(index="last_statement", document=json_file, ignore=400)
         #print(f"Indexed document ID {doc}")
     #input_file.close()
+    print(f"Indexed {sum} documents")
 
 def remove_stopwords(line):
     file=open("stopwords.txt", "r")
