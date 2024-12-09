@@ -8,7 +8,12 @@ from tkinter import ttk # Dictionary for the GUI application
 from search import search_menu
  
 # GUI
+def first_menu():
+    main_window.destroy()
+    search_menu()
+
 def main_menu():
+    global main_window
     main_window = tk.Tk()
     main_window.title("Browser \"The Incognitooo...\"")
     main_window.geometry("1366x768")  # Width x Height
@@ -21,6 +26,6 @@ def main_menu():
     ttk.Label(frm, text="Αρχικά θα ήθελα να ανεβάσεις το αρχείο από το οποίο  ").grid(column=0, row=1)
     ttk.Label(frm, text="ΕΕφόσον το ανεβάσεις. επέλεξε μία από τις διαθέσιμες επιλογές του φυλλομετρητή: ").grid(column=0, row=1)
     ttk.Button(frm, text="Έξοδος", command=main_window.destroy).grid(column=1, row=0)
-    ttk.Button(frm, text="Αναζήτηση", command=search_menu).grid(column=1, row=1)
+    ttk.Button(frm, text="Αναζήτηση", command=first_menu).grid(column=1, row=1)
     #ttk.Button(frm, text="Προσθήκη/Διαγραφή καταχώρησης", command=addremove_menu).grid(column=1, row=2)
     main_window.mainloop()

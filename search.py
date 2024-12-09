@@ -88,20 +88,64 @@ def selections():
         ttk.Radiobutton(frm, text="Must", variable=choosen[fields[i]].update({"type":"must"}), value="must").grid(row=i, column=2)
         ttk.Radiobutton(frm, text="Should", variable=choosen[fields[i]].update({"type":"should"}), value="should").grid(row=i, column=3)
         ttk.Radiobutton(frm, text="Must Not", variable=choosen[fields[i]].update({"type":"must-not"}), value="must-not").grid(row=i, column=4)
-        """
+    """
     ttk.Button(frm, text="Υποβολή", command=lambda: construct_query(choosen, fields)).grid(column=0, row=19)
 
 def construct_query(choosen, fields):
-    query = None
-
-    for field in fields:
-        if choosen[field]["choosen"].get():  # Check if field is selected
-            print(choosen[field]["type"].get())
-    for field in fields:
+    entries = []
+    for element in frm.winfo_children():
+        element.destroy()
+    i=20
+    j=0
+    for i, field in enumerate(fields):
         if choosen[field]["choosen"].get():
-            search_entry = ttk.Entry(frm, width=50)
-            search_entry.grid(column=1, row=20)
-            query="{query:{ bool: "+choosen[field]["type"]+"{: {match:"+ {fields[i]: search_entry.get()}+"}}}}"
-            client.search(index="last_statement", body=query, ignore=400)
+            entries.append(tk.StringVar())
+            ttk.Label(frm, text="Πεδίο: "+ field).grid(column=0, row=i)
+            ttk.Label(frm, text="Τύπος: "+ choosen[field]["type"].get()).grid(column=0, row=i+1)
+            ttk.Entry(frm, width=50, textvar=entries[j], textvariable=entries[j]).grid(column=1, row=i)
+            j+=1
+    ttk.Button(frm, text="Υποβολή", command=lambda: construct_query2(choosen, fields, entries)).grid(column=0, row=23)
+
+def construct_query2(choosen, fields, entries):
+    """
+    j=0
+    match_text = None
+    type_text = None
+    query = {
+        "query": {
+            "bool": { 
+                
+             }
+            }
+        }
+    """
+    must_text=None
+    should_text=None
+    must_not_text=None
+    query ={
+        "query": {
+            "bool": {
+                "must": [],
+                "should": [],
+                "must_not": []
+            }
+        }
+    }
+    j=0
+    for i,field in enumerate(fields):
+        if choosen[field]["choosen"].get():
+            if choosen[field]["type"].get() == "must":
+                must_text = {"match": {field: entries[j].get()}}
+                query["query"]["bool"]["must"].append(must_text)
+            elif choosen[field]["type"].get() == "must_not":
+                must_not_text = {"match": {field: entries[j].get()}}
+                query["query"]["bool"]["should"].append(must_not_text)
+            else:
+                should_text = {"match": {field: entries[j].get()}}
+                query["query"]["bool"]["should"].append(should_text)
+            j+=1
     print(query)
-    print("EPITUXWS TO SEARCH")
+    print("EPITUXWS TO SEARCH") 
+
+def extract_string(entry):
+    return 
