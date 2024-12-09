@@ -22,7 +22,22 @@ def add_from_file():
     next(input_file)
     for line in input_file:
         doc=line.strip().split(',',19)
+
         
+        if not doc[3].isdigit():
+            right_name=doc[1]+doc[2]
+            
+            
+
+            doc1=line.strip().split(',',20)
+            for i in range(1, 20):
+                if i==1:
+                    doc1[i]=right_name
+                else:
+                    doc1[i]=doc1[i+1]
+            print(doc1)
+            doc=doc1
+
         
         temp={
             "Execution": doc[0],
