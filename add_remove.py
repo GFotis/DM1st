@@ -10,6 +10,20 @@ from elasticsearch_connection import client
 import json
 #client.indices.delete(index="last_statement")
 
+def addremove_menu():
+    main_window = tk.Tk()
+    main_window.title("Add or remove data from file")
+    delete_Entry=tk.StringVar()
+    frm = ttk.Frame(main_window, padding=10)
+    frm.grid()
+    ttk.Label(frm, text="Επέλεξε αρχείο:").grid(column=0, row=0)    
+    ttk.Button(frm,text="Browse..",command=add_from_file).grid(column=1,row=0)
+    ttk.Label(frm, text="Διέγραψε κάποιον:").grid(column=0, row=1)
+    tk.Entry(frm,textvariable=delete_Entry, width=50).grid(column=1,row=1)
+    ttk.Button(frm,text="Delete",command=remove_from_index).grid(column=2,row=1)
+    ttk.Button(frm,text="Delete Index",command=remove_index).grid(column=0,row=2)
+    main_window.mainloop()
+
 def select_file():
     file_path = filedialog.askopenfilename(
         filetypes=[("CSV Files", "*.csv"), ("JSON Files", "*.json"), ("Text Files", "*.txt")],
@@ -57,31 +71,3 @@ def remove_from_index():
 def remove_index():
     print("Deleting index..")
     client.indices.delete(index="last_statement")
-
-root = tk.Tk()
-root.title("Add or remove data from file")
-delete_Entry=tk.StringVar()
-frm = ttk.Frame(root, padding=10)
-frm.grid()
-ttk.Label(frm, text="Επέλεξε αρχείο:").grid(column=0, row=0)    
-ttk.Button(frm,text="Browse..",command=add_from_file).grid(column=1,row=0)
-ttk.Label(frm, text="Διέγραψε κάποιον:").grid(column=0, row=1)
-tk.Entry(frm,textvariable=delete_Entry, width=50).grid(column=1,row=1)
-ttk.Button(frm,text="Delete",command=remove_from_index).grid(column=2,row=1)
-ttk.Button(frm,text="Delete Index",command=remove_index).grid(column=0,row=2)
-
-
-root.mainloop()
-
-
-
-    #client.indices.delete(index="last_statement")
-    #client.update(
-   #     index="last_statement",
-    #    id="2",
-   #     doc={
-    #        "LastName": "Bond"
-            
-   #     },
-   # )
-   # client.delete(index="last_statement", id=doc_id)

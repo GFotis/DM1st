@@ -4,16 +4,15 @@
 
 #this code is for laptop
 from elasticsearch import Elasticsearch
-
+"""
 global client
-client = Elasticsearch("https://192.168.1.184:9200",basic_auth=("elastic", "PBnfeM70JxtCuo0ki2Xw"),verify_certs=False)
+client = Elasticsearch("https://localhost:9200",basic_auth=("elastic", "xAISMeh9AnvmRzjOo9SH"),verify_certs=False)
 
 if client.ping():
     print("Connected to Elasticsearch!")
 else:
     print("Could not connect to Elasticsearch.")
 """
-this code is for desktop
 from elasticsearch import Elasticsearch
 
 global client
@@ -23,4 +22,3 @@ if client.ping():
     print("Connected to Elasticsearch!")
 else:
     print("Could not connect to Elasticsearch.")
-"""
