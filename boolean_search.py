@@ -71,7 +71,7 @@ def construct_query(choosen, fields, frm):
         if choosen[field]["choosen"].get():
             entries.append(tk.StringVar())
             ttk.Label(frm, text="Πεδίο: "+ field).grid(column=0, row=i)
-            ttk.Label(frm, text="Τύπος: "+ choosen[field]["type"].get()).grid(column=0, row=i+1)
+            #ttk.Label(frm, text="Τύπος: "+ choosen[field]["type"].get()).grid(column=0, row=i+1)
             ttk.Entry(frm, width=50, textvar=entries[j], textvariable=entries[j]).grid(column=1, row=i)
             j+=1
     ttk.Button(frm, text="Υποβολή", command=lambda: construct_query2(choosen, fields, entries)).grid(column=0, row=23)

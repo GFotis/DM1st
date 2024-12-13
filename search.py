@@ -8,6 +8,7 @@ from indexing_and_preprocessing import indexing_and_preprocessing
 from elasticsearch_connection import client
 import boolean_search as bs
 import vsm_search as vsm
+import phrase_search as ps
 
 def destroy_all_widgets():
     for widget in frm.winfo_children():
@@ -31,7 +32,8 @@ def search_menu():
     ttk.Label(frm, text="Επέλεξε με ποιο μοντέλο θέλεις να γίνει η αναζήτηση:").grid(column=0, row=0)
     ttk.Button(frm, text="Boolean Model ", command=searching_boolean).grid(column=1, row=3)
     ttk.Button(frm, text="VSM Model ", command=searching_vsm).grid(column=2, row=3)
-    ttk.Button(frm, text="Έξοδος", command=return_to_main_menu).grid(column=3, row=3)
+    ttk.Button(frm, text="Phrase Model ", command=searching_phrase).grid(column=3, row=3)
+    ttk.Button(frm, text="Έξοδος", command=return_to_main_menu).grid(column=4, row=3)
     main_window.mainloop()
 
 def searching_vsm():
@@ -41,3 +43,7 @@ def searching_vsm():
 def searching_boolean():
     destroy_all_widgets()
     bs.selections(frm)
+
+def searching_phrase():
+    destroy_all_widgets()
+    ps.selections(frm)
