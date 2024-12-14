@@ -1,8 +1,18 @@
+# Omada ekponishs ergasias:
+# Fotios Galanis 2022202000032 dit20032@go.uop.gr
+# Dimitrios Bozikakis 2022202000027 dit20027@go.uop.gr
+
 from tkinter import ttk
 import tkinter as tk
 from elasticsearch_connection import client
 
-def selections(frm):
+def selections():
+    boolean_window = tk.Toplevel()
+    boolean_window.title("Browser \"The Incognitooo...\"")
+    boolean_window.geometry("1366x768")
+    global frm
+    frm = ttk.Frame(boolean_window, padding=10)
+    frm.grid()
     fields = ["Execution", "LastName", "FirstName", "TDCJNumber", "Age", "Race","CountyOfConviction", "AgeWhenReceived", "EducationLevel", "NativeCounty",
             "PreviousCrime", "Codefendants", "NumberVictim ", "WhiteVictim","HispanicVictim", "BlackVictim", "VictimOther Races", "FemaleVictim", "MaleVictim", "LastStatement"]
     ttk.Label(frm, text="Αρχικά θα επιλέξεις σε ποια πεδια θες να αναζητησεις.").grid(column=0, row=1)
@@ -60,9 +70,9 @@ def selections(frm):
         ttk.Radiobutton(frm, text="Should", variable=choosen[fields[i]].update({"type":"should"}), value="should").grid(row=i, column=3)
         ttk.Radiobutton(frm, text="Must Not", variable=choosen[fields[i]].update({"type":"must-not"}), value="must-not").grid(row=i, column=4)
     """
-    ttk.Button(frm, text="Υποβολή", command=lambda: construct_query(choosen, fields, frm)).grid(column=0, row=19)
+    ttk.Button(frm, text="Υποβολή", command=lambda: construct_query(choosen, fields)).grid(column=0, row=19)
 
-def construct_query(choosen, fields, frm):
+def construct_query(choosen, fields):
     entries = []
     for element in frm.winfo_children():
         element.destroy()
@@ -78,18 +88,6 @@ def construct_query(choosen, fields, frm):
     ttk.Button(frm, text="Υποβολή", command=lambda: construct_query2(choosen, fields, entries)).grid(column=0, row=23)
 
 def construct_query2(choosen, fields, entries):
-    """
-    j=0
-    match_text = None
-    type_text = None
-    query = {
-        "query": {
-            "bool": { 
-                
-             }
-            }
-        }
-    """
     must_text=None
     should_text=None
     must_not_text=None
@@ -134,11 +132,5 @@ def results_print(resp):
             print("Αποτέλεσμα ", j)
             for i in enumerate(hit["_source"]):
                 print(i)
-        #print("Execution: ", hit["_source"]["Execution"])
-       #print("LastName: ", hit["_source"]["LastName"])
-       # print("FirstName: ", hit["_source"]["FirstName"])
-       # print("TDCJNumber: ", hit["_source"]["TDCJNumber"])
-       # print("Age: ", hit["_source"]["Age"])
-      #  print
     
 

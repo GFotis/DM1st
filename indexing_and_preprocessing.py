@@ -1,15 +1,18 @@
 # Omada ekponishs ergasias:
 # Fotios Galanis 2022202000032 dit20032@go.uop.gr
 # Dimitrios Bozikakis 2022202000027 dit20027@go.uop.gr
+
 from elasticsearch_connection import client
 import json
 import pandas 
-import csv
 
 #PROSWRINA ME PANDAS GIA NA PROXWRISEI TO PROJECT
 
 def indexing_and_preprocessing():
     #input_file = open("input_data\\Texas Last Statement.csv", "r")
+    if client.indices.exists(index="last_statement"):
+        print("Έχει ήδη γίνει εισαγωγή των δεδομένων στΟ Elasticsearch!")
+        return
     input_file=pandas.read_csv("input_data\\Texas Last Statement.csv")
     #next(input_file)
     sum=0

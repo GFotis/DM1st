@@ -10,20 +10,8 @@ import boolean_search as bs
 import vsm_search as vsm
 import phrase_search as ps
 
-def destroy_all_widgets():
-    for widget in frm.winfo_children():
-        widget.destroy()
-
-def return_to_main_menu():
-    destroy_all_widgets()
-
-def cancel_search():
-    destroy_all_widgets()
-    search_menu()
-
 def search_menu():
-    global frm
-    main_window = tk.Tk()
+    main_window = tk.Toplevel()
     main_window.title("Browser \"The Incognitooo...\"")
     main_window.geometry("1366x768")
     frm = ttk.Frame(main_window, padding=10)
@@ -33,17 +21,14 @@ def search_menu():
     ttk.Button(frm, text="Boolean Model ", command=searching_boolean).grid(column=1, row=3)
     ttk.Button(frm, text="VSM Model ", command=searching_vsm).grid(column=2, row=3)
     ttk.Button(frm, text="Phrase Model ", command=searching_phrase).grid(column=3, row=3)
-    ttk.Button(frm, text="Έξοδος", command=return_to_main_menu).grid(column=4, row=3)
+    ttk.Button(frm, text="Επιστροφή", command=main_window.destroy).grid(column=4, row=3)
     main_window.mainloop()
 
 def searching_vsm():
-    destroy_all_widgets()
-    vsm.selections(frm)
+    vsm.selections()
 
 def searching_boolean():
-    destroy_all_widgets()
-    bs.selections(frm)
+    bs.selections()
 
 def searching_phrase():
-    destroy_all_widgets()
-    ps.selections(frm)
+    ps.selections()
