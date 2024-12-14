@@ -18,6 +18,10 @@ from elasticsearch import Elasticsearch
 global client
 client = Elasticsearch("https://localhost:9200",basic_auth=("elastic", "PBnfeM70JxtCuo0ki2Xw"),verify_certs=False)
 
+resp = client.indices.delete(
+    index="last_statement",
+)
+
 if client.ping():
     print("Connected to Elasticsearch!")
 else:

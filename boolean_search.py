@@ -1,5 +1,6 @@
 from tkinter import ttk
 import tkinter as tk
+from elasticsearch_connection import client
 
 def selections(frm):
     fields = ["Execution", "LastName", "FirstName", "TDCJNumber", "Age", "Race","CountyOfConviction", "AgeWhenReceived", "EducationLevel", "NativeCounty",
@@ -115,7 +116,29 @@ def construct_query2(choosen, fields, entries):
                 query["query"]["bool"]["should"].append(should_text)
             j+=1
     print(query)
-    print("EPITUXWS TO SEARCH") 
+    execute_search(query)
 
-def extract_string(entry):
-    return 
+def execute_search(query):
+    resp=client.search(index="last_statement", body=query)
+    results_print(resp)
+
+def results_print(resp):
+    print("Results:")
+    prev_hit = None
+    print("Total: ", resp["hits"]["total"]["value"])
+    prev_hit = resp["hits"]["hits"][0]["_source"]
+    for j,  hit in enumerate(resp["hits"]["hits"]):
+        if hit==prev_hit:
+            continue
+        else:
+            print("Αποτέλεσμα ", j)
+            for i in enumerate(hit["_source"]):
+                print(i)
+        #print("Execution: ", hit["_source"]["Execution"])
+       #print("LastName: ", hit["_source"]["LastName"])
+       # print("FirstName: ", hit["_source"]["FirstName"])
+       # print("TDCJNumber: ", hit["_source"]["TDCJNumber"])
+       # print("Age: ", hit["_source"]["Age"])
+      #  print
+    
+

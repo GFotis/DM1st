@@ -61,45 +61,43 @@ def construct_query(choosen, fields, frm):
             #ttk.Label(frm, text="Τύπος: "+ choosen[field]["type"].get()).grid(column=0, row=i+1)
             ttk.Entry(frm, width=50, textvar=entries[j], textvariable=entries[j]).grid(column=1, row=i)
             j+=1
-    ttk.Button(frm, text="Υποβολή", command=lambda: construct_query2(choosen, fields, entries)).grid(column=0, row=23)
+    ttk.Button(frm, text="Υποβολή", command=lambda: construct_query2(choosen, fields, entries, frm)).grid(column=0, row=23)
 
     
-def construct_query2(choosen, fields, entries):
-    query = {
-            "match_phrase": {
-                "Execution": [],
-                "LastName": [],
-                "FirstName": [],
-                "TDCJNumber": [],
-                "Age": [],
-                "Race": [],
-                "CountyOfConviction": [],
-                "AgeWhenReceived": [],
-                "EducationLevel": [],
-                "NativeCounty": [],
-                "PreviousCrime": [],
-                "Codefendants": [],
-                "NumberVictim ":[],
-                "WhiteVictim": [],
-                "HispanicVictim": [],
-                "BlackVictim": [],
-                "VictimOther Races": [],
-                "FemaleVictim": [],
-                "MaleVictim": [],
-                "LastStatement": []
+def construct_query2(choosen, fields, entries, frm):
+    query ={
+        "query": {
+            "bool": {
+                "must": []
             }
         }
+    }
     j=0
     for i,field in enumerate(fields):
         if choosen[field]["choosen"].get():
-            text = {"{field}": {entries[j].get()}}
-            query["match_phrase"][field].append(text)
+            text = {"match_phrase": {field:  entries[j].get()}}
+            query["query"]["bool"]["must"].append(text)
+            #must_text = {"match": {field: entries[j].get()}}
+              #  query["query"]["bool"]["must"].append(must_text)
             j+=1
     print(query)
     print("EPITUXWS TO SEARCH") 
+    execute_search(query, frm)
 
-    
-def execute_search(query):
-    resp = client.search(query)
-    print("Phrase search results:")
-    print(resp)
+def execute_search(query, frm):
+    resp = client.search(index="last_statement", body=query)
+    ttk.Label(frm, text=f"Βρέθηκαν {resp['hits']['total']['value']} αποτελέσματα").grid(column=0, row=5)  
+    #print_results(resp)
+
+def print_results(resp):
+    main_window = tk.Tk()
+    main_window.geometry("1366x768") 
+    main_window.title("Search Results")
+    frm = ttk.Frame(main_window, padding=10)
+    frm.grid()
+    ttk.Label(frm, text="Αποτελέσματα Αναζήτησης:").grid(column=0, row=0)
+    #i = 1  
+   # for hit in resp["hits"]["hits"]:
+     #   ttk.Label(frm, text=hit["_source"]).grid(column=0, row=i)
+     #   i += 1
+    #main_window.mainloop()

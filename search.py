@@ -25,7 +25,7 @@ def search_menu():
     global frm
     main_window = tk.Tk()
     main_window.title("Browser \"The Incognitooo...\"")
-    main_window.geometry("1366x768")  # Width x Height
+    main_window.geometry("1366x768")
     frm = ttk.Frame(main_window, padding=10)
     indexing_and_preprocessing()
     frm.grid()
