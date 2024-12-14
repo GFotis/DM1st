@@ -2,13 +2,13 @@
 # Fotios Galanis 2022202000032 dit20032@go.uop.gr
 # Dimitrios Bozikakis 2022202000027 dit20027@go.uop.gr
 
-import tkinter as tk # Dictionary for the GUI application
-from tkinter import ttk, Label,Entry,  Button, filedialog, messagebox # Dictionary for the GUI application
+import tkinter as tk 
+from tkinter import ttk, Label,Entry,  Button, filedialog, messagebox 
 from elasticsearch_connection import client
 
-# GUI
+
 import json
-#client.indices.delete(index="last_statement")
+
 
 def select_file():
     file_path = filedialog.askopenfilename(
@@ -18,60 +18,81 @@ def select_file():
     print(file_path)
     return file_path
 def add_from_file():
-    input_file = open(select_file(), "r")
-    next(input_file)
-    for line in input_file:
-        doc=line.strip().split(',',19)
+    try:
+        input_file = open(select_file(), "r")
+    except FileNotFoundError:
+        print("Could not find the file")
+        return
+    except PermissionError:
+        print("You have no permission to read this file")
+        return
+    try:
+        next(input_file)
+        for line in input_file:
+            doc=line.strip().split(',',19)
+
+            
+            if not doc[3].isdigit():
+                right_name=doc[1]+doc[2]
+                
+                
+
+                doc1=line.strip().split(',',20)
+                for i in range(1, 20):
+                    if i==1:
+                        doc1[i]=right_name
+                    else:
+                        doc1[i]=doc1[i+1]
+                print(doc1)
+                doc=doc1
+
+            
+            temp={
+                "Execution": doc[0],
+                "LastName": doc[1],
+                "FirstName": doc[2],
+                "TDCJNumber": doc[3],
+                "Age": doc[4],
+                "Race": doc[5],
+                "CountyOfConviction": doc[6],
+                "AgeWhenReceived": doc[7],
+                "EducationLevel": doc[8],
+                "NativeCounty": doc[9],
+                "PreviousCrime": doc[10],
+                "Codefendants": doc[11],
+                "NumberVictim": doc[12],
+                "WhiteVictim": doc[13],
+                "HispanicVictim": doc[14],
+                "BlackVictim": doc[15],
+                "VictimOther Races": doc[16],
+                "FemaleVictim": doc[17],
+                "MaleVictim": doc[18],
+                "LastStatement": doc[19]
+            }
+            json_file=json.dumps(temp)
+            client.index(index="last_statement",id=doc[0], document=json_file)
+    except Exception as e:
+        print("Minor error occured")
+    
+        print(f"Indexed from file!")
 
         
-        if not doc[3].isdigit():
-            right_name=doc[1]+doc[2]
-            
-            
-
-            doc1=line.strip().split(',',20)
-            for i in range(1, 20):
-                if i==1:
-                    doc1[i]=right_name
-                else:
-                    doc1[i]=doc1[i+1]
-            print(doc1)
-            doc=doc1
-
-        
-        temp={
-            "Execution": doc[0],
-            "LastName": doc[1],
-            "FirstName": doc[2],
-            "TDCJNumber": doc[3],
-            "Age": doc[4],
-            "Race": doc[5],
-            "CountyOfConviction": doc[6],
-            "AgeWhenReceived": doc[7],
-            "EducationLevel": doc[8],
-            "NativeCounty": doc[9],
-            "PreviousCrime": doc[10],
-            "Codefendants": doc[11],
-            "NumberVictim": doc[12],
-            "WhiteVictim": doc[13],
-            "HispanicVictim": doc[14],
-            "BlackVictim": doc[15],
-            "VictimOther Races": doc[16],
-            "FemaleVictim": doc[17],
-            "MaleVictim": doc[18],
-            "LastStatement": doc[19]
-        }
-        json_file=json.dumps(temp)
-        client.index(index="last_statement",id=doc[0], document=json_file)
-        print(f"Indexed document ID {doc}")
 def remove_from_index():
     doc_to_remove=delete_Entry.get()
-    print(doc_to_remove)
-    client.delete(index="last_statement", id=doc_to_remove)
+    try:
+        
+        client.delete(index="last_statement", id=doc_to_remove)
+        print("Removed doc ",doc_to_remove)
+    except Exception as e:
+        print("Error could not find the doc that you were looking for")
 
 def remove_index():
-    print("Deleting index..")
-    client.indices.delete(index="last_statement")
+    try:
+        
+        client.indices.delete(index="last_statement")
+        print("Deleting index..")
+    except Exception as e:
+        print("Error could not find the index you were looking for,you can add files to make one")
 
 root = tk.Tk()
 root.title("Add or remove data from file")
@@ -90,13 +111,3 @@ root.mainloop()
 
 
 
-    #client.indices.delete(index="last_statement")
-    #client.update(
-   #     index="last_statement",
-    #    id="2",
-   #     doc={
-    #        "LastName": "Bond"
-            
-   #     },
-   # )
-   # client.delete(index="last_statement", id=doc_id)
