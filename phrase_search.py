@@ -38,14 +38,9 @@ def selections():
         "MaleVictim": {"choosen": tk.BooleanVar()},
         "LastStatement": {"choosen": tk.BooleanVar()}
     } 
-    #PROSWRINA AI HELP SE AFTO TO SHMEIO GIA NA PROXWRAME
     for i in range(0, 19):
-        # Create a BooleanVar for the checkbox
         choosen[fields[i]]["choosen"] = tk.BooleanVar()
-        ttk.Checkbutton(
-            frm, text=fields[i], variable=choosen[fields[i]]["choosen"]
-        ).grid(row=i, column=1)
-    #PROSWRINA AI HELP SE AFTO TO SHMEIO GIA NA PROXWRAME
+        ttk.Checkbutton(frm, text=fields[i], variable=choosen[fields[i]]["choosen"]).grid(row=i, column=1)
     """
     for i in range(0,19):
         choosen[fields[i]]["choosen"]=tk.BooleanVar()

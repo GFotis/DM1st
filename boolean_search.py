@@ -38,20 +38,15 @@ def selections():
         "MaleVictim": {"choosen": tk.BooleanVar(), "type": tk.StringVar()},
         "LastStatement": {"choosen": tk.BooleanVar(), "type": tk.StringVar()}
     } 
-    #PROSWRINA AI HELP SE AFTO TO SHMEIO GIA NA PROXWRAME
     for i in range(0, 19):
-        # Create a BooleanVar for the checkbox
         choosen[fields[i]]["choosen"] = tk.BooleanVar()
         ttk.Checkbutton(frm, text=fields[i], variable=choosen[fields[i]]["choosen"]).grid(row=i, column=1)
 
-        # Create a StringVar for the radiobutton group
-        choosen[fields[i]]["type"] = tk.StringVar(value="not-choosen")  # Default to "must"
+        choosen[fields[i]]["type"] = tk.StringVar(value="not-choosen")
 
-        # Radiobuttons for "must", "should", and "must-not"
         ttk.Radiobutton(frm, text="Must", variable=choosen[fields[i]]["type"], value="must").grid(row=i, column=2)
         ttk.Radiobutton(frm, text="Should", variable=choosen[fields[i]]["type"], value="should").grid(row=i, column=3)
         ttk.Radiobutton(frm, text="Must Not", variable=choosen[fields[i]]["type"], value="must-not").grid(row=i, column=4)
-    #PROSWRINA AI HELP SE AFTO TO SHMEIO GIA NA PROXWRAME
     """
     for i in range(0,19):
         choosen[fields[i]]["choosen"]=tk.BooleanVar()
