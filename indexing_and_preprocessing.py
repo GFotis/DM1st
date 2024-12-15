@@ -4,9 +4,7 @@
 
 from elasticsearch_connection import client
 import json
-import pandas 
-
-#PROSWRINA ME PANDAS GIA NA PROXWRISEI TO PROJECT
+import pandas
 
 def indexing_and_preprocessing():
     #input_file = open("input_data\\Texas Last Statement.csv", "r")

@@ -12,7 +12,7 @@ import phrase_search as ps
 
 def search_menu():
     main_window = tk.Toplevel()
-    main_window.title("Browser \"The Incognitooo...\"")
+    main_window.title("Which Model???")
     main_window.geometry("1366x768")
     frm = ttk.Frame(main_window, padding=10)
     indexing_and_preprocessing()

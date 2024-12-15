@@ -8,9 +8,8 @@ from elasticsearch_connection import client
 
 def selections():
     boolean_window = tk.Toplevel()
-    boolean_window.title("Browser \"The Incognitooo...\"")
+    boolean_window.title("Boolean Model Search")
     boolean_window.geometry("1366x768")
-    global frm
     frm = ttk.Frame(boolean_window, padding=10)
     frm.grid()
     fields = ["Execution", "LastName", "FirstName", "TDCJNumber", "Age", "Race","CountyOfConviction", "AgeWhenReceived", "EducationLevel", "NativeCounty",
@@ -43,23 +42,15 @@ def selections():
     for i in range(0, 19):
         # Create a BooleanVar for the checkbox
         choosen[fields[i]]["choosen"] = tk.BooleanVar()
-        ttk.Checkbutton(
-            frm, text=fields[i], variable=choosen[fields[i]]["choosen"]
-        ).grid(row=i, column=1)
+        ttk.Checkbutton(frm, text=fields[i], variable=choosen[fields[i]]["choosen"]).grid(row=i, column=1)
 
         # Create a StringVar for the radiobutton group
         choosen[fields[i]]["type"] = tk.StringVar(value="not-choosen")  # Default to "must"
 
         # Radiobuttons for "must", "should", and "must-not"
-        ttk.Radiobutton(
-            frm, text="Must", variable=choosen[fields[i]]["type"], value="must"
-        ).grid(row=i, column=2)
-        ttk.Radiobutton(
-            frm, text="Should", variable=choosen[fields[i]]["type"], value="should"
-        ).grid(row=i, column=3)
-        ttk.Radiobutton(
-            frm, text="Must Not", variable=choosen[fields[i]]["type"], value="must-not"
-        ).grid(row=i, column=4)
+        ttk.Radiobutton(frm, text="Must", variable=choosen[fields[i]]["type"], value="must").grid(row=i, column=2)
+        ttk.Radiobutton(frm, text="Should", variable=choosen[fields[i]]["type"], value="should").grid(row=i, column=3)
+        ttk.Radiobutton(frm, text="Must Not", variable=choosen[fields[i]]["type"], value="must-not").grid(row=i, column=4)
     #PROSWRINA AI HELP SE AFTO TO SHMEIO GIA NA PROXWRAME
     """
     for i in range(0,19):
@@ -73,6 +64,11 @@ def selections():
     ttk.Button(frm, text="Υποβολή", command=lambda: construct_query(choosen, fields)).grid(column=0, row=19)
 
 def construct_query(choosen, fields):
+    boolean_window = tk.Toplevel()
+    boolean_window.geometry("800x400") 
+    boolean_window.title("Filling the fields")
+    frm = ttk.Frame(boolean_window, padding=10)
+    frm.grid()
     entries = []
     for element in frm.winfo_children():
         element.destroy()
@@ -118,19 +114,28 @@ def construct_query2(choosen, fields, entries):
 
 def execute_search(query):
     resp=client.search(index="last_statement", body=query)
-    results_print(resp)
+    print_results(resp)
 
-def results_print(resp):
-    print("Results:")
-    prev_hit = None
-    print("Total: ", resp["hits"]["total"]["value"])
-    prev_hit = resp["hits"]["hits"][0]["_source"]
-    for j,  hit in enumerate(resp["hits"]["hits"]):
-        if hit==prev_hit:
-            continue
-        else:
-            print("Αποτέλεσμα ", j)
-            for i in enumerate(hit["_source"]):
-                print(i)
-    
-
+def print_results(resp):
+    boolean_window = tk.Toplevel()
+    boolean_window.geometry("1366x768") 
+    boolean_window.title("Search Results of Phrase Model")
+    frm = ttk.Frame(boolean_window, padding=10)
+    frm.grid()
+    ttk.Label(frm, text=f"Βρέθηκαν {resp['hits']['total']['value']} αποτελέσματα.").grid(column=0, row=0) 
+    ttk.Label(frm, text="Αποτελέσματα Αναζήτησης:").grid(column=0, row=1)
+    j=3
+    i=2
+    for k,hit in enumerate(resp["hits"]["hits"]):
+        #print("MPAINEIIIII")
+        #print(hit["_source"])
+        result_fields=[]
+        #ttk.Label(frm, text=i+" result: "+str(hit["_source"])+"\n").grid(column=0, row=j)
+        tk.Label(frm, text=str(k+1)+" result: \n").grid(column=0, row=i)
+        for field in hit["_source"]:
+            result_fields.append(str(field)+": "+str(hit["_source"][field]))
+        for k,text in enumerate(result_fields):
+            ttk.Label(frm, text=text + "\n").grid(column=k, row=i)
+            k+=1
+        i+=1
+    boolean_window.mainloop()

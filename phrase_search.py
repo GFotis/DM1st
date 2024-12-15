@@ -8,7 +8,7 @@ from elasticsearch_connection import client
 
 def selections():
     phrase_window = tk.Toplevel()
-    phrase_window.title("Browser \"The Incognitooo...\"")
+    phrase_window.title("Phrase Model Search")
     phrase_window.geometry("1366x768")
     frm = ttk.Frame(phrase_window, padding=10)
     frm.grid()
@@ -58,6 +58,11 @@ def selections():
     ttk.Button(frm, text="Υποβολή", command=lambda: construct_query(choosen, fields, frm)).grid(column=0, row=19)
 
 def construct_query(choosen, fields, frm):
+    phrase_window = tk.Toplevel()
+    phrase_window.geometry("800x400") 
+    phrase_window.title("Filling the fields")
+    frm = ttk.Frame(phrase_window, padding=10)
+    frm.grid()
     entries = []
     for element in frm.winfo_children():
         element.destroy()
@@ -86,27 +91,35 @@ def construct_query2(choosen, fields, entries, frm):
         if choosen[field]["choosen"].get():
             text = {"match_phrase": {field:  entries[j].get()}}
             query["query"]["bool"]["must"].append(text)
-            #must_text = {"match": {field: entries[j].get()}}
-              #  query["query"]["bool"]["must"].append(must_text)
             j+=1
     print(query)
-    print("EPITUXWS TO SEARCH") 
+    #print("EPITUXWS TO SEARCH") 
     execute_search(query, frm)
 
 def execute_search(query, frm):
     resp = client.search(index="last_statement", body=query)
-    ttk.Label(frm, text=f"Βρέθηκαν {resp['hits']['total']['value']} αποτελέσματα").grid(column=0, row=5)  
-    #print_results(resp)
+    print_results(resp)
 
 def print_results(resp):
-    main_window = tk.Tk()
-    main_window.geometry("1366x768") 
-    main_window.title("Search Results")
-    frm = ttk.Frame(main_window, padding=10)
+    phrase_window = tk.Toplevel()
+    phrase_window.geometry("1366x768") 
+    phrase_window.title("Search Results of Phrase Model")
+    frm = ttk.Frame(phrase_window, padding=10)
     frm.grid()
-    ttk.Label(frm, text="Αποτελέσματα Αναζήτησης:").grid(column=0, row=0)
-    i = 1  
-    for hit in resp["hits"]["hits"]:
-        ttk.Label(frm, text=hit["_source"]).grid(column=0, row=i)
-        i += 1
-    main_window.mainloop()
+    ttk.Label(frm, text=f"Βρέθηκαν {resp['hits']['total']['value']} αποτελέσματα.").grid(column=0, row=0) 
+    ttk.Label(frm, text="Αποτελέσματα Αναζήτησης:").grid(column=0, row=1)
+    j=3
+    i=2
+    for k,hit in enumerate(resp["hits"]["hits"]):
+        #print("MPAINEIIIII")
+        #print(hit["_source"])
+        result_fields=[]
+        #ttk.Label(frm, text=i+" result: "+str(hit["_source"])+"\n").grid(column=0, row=j)
+        tk.Label(frm, text=str(k+1)+" result: \n").grid(column=0, row=i)
+        for field in hit["_source"]:
+            result_fields.append(str(field)+": "+str(hit["_source"][field]))
+        for k,text in enumerate(result_fields):
+            ttk.Label(frm, text=text + "\n").grid(column=k, row=i)
+            k+=1
+        i+=1
+    phrase_window.mainloop()
